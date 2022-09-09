@@ -36,26 +36,35 @@ namespace Objects.Converter.AutocadCivil
   {
 #if AUTOCAD2021
     public static string AutocadAppName = VersionedHostApplications.Autocad2021;
+    public static string AppName = HostApplications.AutoCAD.Name;
 #elif AUTOCAD2022
     public static string AutocadAppName = VersionedHostApplications.Autocad2022;
+    public static string AppName = HostApplications.AutoCAD.Name;
 #elif AUTOCAD2023
     public static string AutocadAppName = VersionedHostApplications.Autocad2023;
+    public static string AppName = HostApplications.AutoCAD.Name;
 #elif CIVIL2021
     public static string AutocadAppName = VersionedHostApplications.Civil2021;
+    public static string AppName = HostApplications.Civil.Name;
 #elif CIVIL2022
     public static string AutocadAppName = VersionedHostApplications.Civil2022;
+    public static string AppName = HostApplications.Civil.Name;
 #elif CIVIL2023
     public static string AutocadAppName = VersionedHostApplications.Civil2023;
+    public static string AppName = HostApplications.Civil.Name;
+#elif ADVANCESTEEL2023
+    public static string AutocadAppName = VersionedHostApplications.AdvanceSteel2023;
+    public static string AppName = HostApplications.AdvanceSteel.Name;
 #endif
 
-    public ConverterAutocadCivil()
-    {
-      var ver = System.Reflection.Assembly.GetAssembly(typeof(ConverterAutocadCivil)).GetName().Version;
-      Report.Log($"Using converter: {Name} v{ver}");
-    }
+        public ConverterAutocadCivil()
+        {
+            var ver = System.Reflection.Assembly.GetAssembly(typeof(ConverterAutocadCivil)).GetName().Version;
+            Report.Log($"Using converter: {Name} v{ver}");
+        }
 
     #region ISpeckleConverter props
-    public string Description => "Default Speckle Kit for AutoCAD";
+    public string Description => $"Default Speckle Kit for {AppName}";
     public string Name => nameof(ConverterAutocadCivil);
     public string Author => "Speckle";
     public string WebsiteOrEmail => "https://speckle.systems";

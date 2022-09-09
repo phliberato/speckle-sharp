@@ -27,6 +27,7 @@ namespace Speckle.Core.Kits
     public const string Autocad2021 = "AutoCAD2021";
     public const string Autocad2022 = "AutoCAD2022";
     public const string Autocad2023 = "AutoCAD2023";
+    public const string AdvanceSteel2023 = "AdvanceSteel2023";
     public const string MicroStation = "MicroStation";
     public const string OpenRoads = "OpenRoads";
     public const string OpenRail = "OpenRail";
@@ -93,6 +94,12 @@ namespace Speckle.Core.Kits
     {
       public const string Name = "AutoCAD";
       public const string Slug = "autocad";
+    }
+
+    public static class AdvanceSteel
+    {
+      public const string Name = "Advance Steel";
+      public const string Slug = "advancesteel";
     }
 
     public static class MicroStation
@@ -185,6 +192,7 @@ namespace Speckle.Core.Kits
     public const string Autocad2021 = "AutoCAD2021";
     public const string Autocad2022 = "AutoCAD2022";
     public const string Autocad2023 = "AutoCAD2023";
+    public const string AdvanceSteel2023 = "AdvanceSteel2023";
     public const string MicroStation = "MicroStation";
     public const string OpenRoads = "OpenRoads";
     public const string OpenRail = "OpenRail";

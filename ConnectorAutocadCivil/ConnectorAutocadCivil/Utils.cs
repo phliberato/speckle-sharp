@@ -45,10 +45,14 @@ namespace Speckle.ConnectorAutocadCivil
     public static string VersionedAppName = VersionedHostApplications.Civil2023;
     public static string AppName = HostApplications.Civil.Name;
     public static string Slug = HostApplications.Civil.Slug;
+#elif ADVANCESTEEL2023
+    public static string VersionedAppName = VersionedHostApplications.AdvanceSteel2023;
+    public static string AppName = HostApplications.AdvanceSteel.Name;
+    public static string Slug = HostApplications.AdvanceSteel.Slug;
 #endif
     public static string invalidChars = @"<>/\:;""?*|=,‘";
 
-    #region extension methods
+#region extension methods
 
     /// <summary>
     /// Retrieves object ids as strings
