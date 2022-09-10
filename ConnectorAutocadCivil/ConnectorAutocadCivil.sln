@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
@@ -49,7 +48,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterCivil2023", "..\Ob
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectorAdvanceSteel2023", "ConnectorAdvanceSteel2023\ConnectorAdvanceSteel2023.csproj", "{F4AA033F-4F85-4990-AFE9-86BE00ABE973}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterAdvanceSteel2023", "..\Objects\Converters\ConverterAutocadCivil\ConverterAdvanceSteel2023\ConverterAdvanceSteel2023.csproj", "{6632FD65-C39A-4899-9AFC-0A4F9437EF9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterAdvanceSteel2023", "..\Objects\Converters\ConverterAutocadCivil\ConverterAdvanceSteel2023\ConverterAdvanceSteel2023.csproj", "{984C0481-B499-4879-B6A9-64ACB1E6C5A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,14 +90,6 @@ Global
 		{8CFC7609-F640-4683-BF13-FE144D3DC50B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8CFC7609-F640-4683-BF13-FE144D3DC50B}.Release|x64.ActiveCfg = Release|Any CPU
 		{8CFC7609-F640-4683-BF13-FE144D3DC50B}.Release|x64.Build.0 = Release|Any CPU
-		{2D0F9F8A-2E89-4780-978A-CD92D6D7B843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D0F9F8A-2E89-4780-978A-CD92D6D7B843}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2D0F9F8A-2E89-4780-978A-CD92D6D7B843}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D0F9F8A-2E89-4780-978A-CD92D6D7B843}.Release|x64.ActiveCfg = Release|Any CPU
-		{B47492D9-2EDA-4016-A930-7FA708C85C3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B47492D9-2EDA-4016-A930-7FA708C85C3D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B47492D9-2EDA-4016-A930-7FA708C85C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B47492D9-2EDA-4016-A930-7FA708C85C3D}.Release|x64.ActiveCfg = Release|Any CPU
 		{361B45EB-DC3F-42BB-93EE-21F31A05FA68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{361B45EB-DC3F-42BB-93EE-21F31A05FA68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{361B45EB-DC3F-42BB-93EE-21F31A05FA68}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -195,14 +186,14 @@ Global
 		{F4AA033F-4F85-4990-AFE9-86BE00ABE973}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F4AA033F-4F85-4990-AFE9-86BE00ABE973}.Release|x64.ActiveCfg = Release|Any CPU
 		{F4AA033F-4F85-4990-AFE9-86BE00ABE973}.Release|x64.Build.0 = Release|Any CPU
-		{6632FD65-C39A-4899-9AFC-0A4F9437EF9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6632FD65-C39A-4899-9AFC-0A4F9437EF9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6632FD65-C39A-4899-9AFC-0A4F9437EF9B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{6632FD65-C39A-4899-9AFC-0A4F9437EF9B}.Debug|x64.Build.0 = Debug|Any CPU
-		{6632FD65-C39A-4899-9AFC-0A4F9437EF9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6632FD65-C39A-4899-9AFC-0A4F9437EF9B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6632FD65-C39A-4899-9AFC-0A4F9437EF9B}.Release|x64.ActiveCfg = Release|Any CPU
-		{6632FD65-C39A-4899-9AFC-0A4F9437EF9B}.Release|x64.Build.0 = Release|Any CPU
+		{984C0481-B499-4879-B6A9-64ACB1E6C5A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{984C0481-B499-4879-B6A9-64ACB1E6C5A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{984C0481-B499-4879-B6A9-64ACB1E6C5A0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{984C0481-B499-4879-B6A9-64ACB1E6C5A0}.Debug|x64.Build.0 = Debug|Any CPU
+		{984C0481-B499-4879-B6A9-64ACB1E6C5A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{984C0481-B499-4879-B6A9-64ACB1E6C5A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{984C0481-B499-4879-B6A9-64ACB1E6C5A0}.Release|x64.ActiveCfg = Release|Any CPU
+		{984C0481-B499-4879-B6A9-64ACB1E6C5A0}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -226,7 +217,7 @@ Global
 		{9A11C16B-790F-437A-9E04-7E0D3ECDC06B} = {8AFDB1E6-D3E7-45EA-BCDC-F3554BDDEF1E}
 		{57A28A09-C64E-47F6-B602-B6D58B19F1D5} = {8AFDB1E6-D3E7-45EA-BCDC-F3554BDDEF1E}
 		{F4AA033F-4F85-4990-AFE9-86BE00ABE973} = {A07071D5-E197-487D-B543-28639AC3C719}
-		{6632FD65-C39A-4899-9AFC-0A4F9437EF9B} = {8AFDB1E6-D3E7-45EA-BCDC-F3554BDDEF1E}
+		{984C0481-B499-4879-B6A9-64ACB1E6C5A0} = {8AFDB1E6-D3E7-45EA-BCDC-F3554BDDEF1E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DB7A654-4C09-4C9B-8CA1-01952811F527}
@@ -239,8 +230,8 @@ Global
 		..\Objects\Converters\ConverterAutocadCivil\ConverterAutocadCivilShared\ConverterAutocadCivilShared.projitems*{575293fb-158c-4f91-abc1-18b60f310b32}*SharedItemsImports = 5
 		..\Objects\Converters\ConverterAutocadCivil\ConverterAutocadCivilShared\ConverterAutocadCivilShared.projitems*{57a28a09-c64e-47f6-b602-b6d58b19f1d5}*SharedItemsImports = 5
 		ConnectorAutocadCivil\ConnectorAutocadCivilShared.projitems*{58a88f1a-7489-46d2-949d-2fc3f68c8d84}*SharedItemsImports = 4
-		..\Objects\Converters\ConverterAutocadCivil\ConverterAutocadCivilShared\ConverterAutocadCivilShared.projitems*{6632fd65-c39a-4899-9afc-0a4f9437ef9b}*SharedItemsImports = 5
 		..\Objects\Converters\ConverterAutocadCivil\ConverterAutocadCivilShared\ConverterAutocadCivilShared.projitems*{8cfc7609-f640-4683-bf13-fe144d3dc50b}*SharedItemsImports = 5
+		..\Objects\Converters\ConverterAutocadCivil\ConverterAutocadCivilShared\ConverterAutocadCivilShared.projitems*{984c0481-b499-4879-b6a9-64acb1e6c5a0}*SharedItemsImports = 5
 		..\Objects\Converters\ConverterAutocadCivil\ConverterAutocadCivilShared\ConverterAutocadCivilShared.projitems*{9a11c16b-790f-437a-9e04-7e0d3ecdc06b}*SharedItemsImports = 5
 		ConnectorAutocadCivil\ConnectorAutocadCivilShared.projitems*{ad10c167-937f-4706-9eb5-c99f86c35e8f}*SharedItemsImports = 4
 		ConnectorAutocadCivil\ConnectorAutocadCivilShared.projitems*{b47492d9-2eda-4016-a930-7fa708c85c3d}*SharedItemsImports = 13
