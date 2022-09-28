@@ -32,4 +32,7 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tutorials16.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\tutorials32.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory).editorconfig" />
+  </ItemGroup>
 </Project>

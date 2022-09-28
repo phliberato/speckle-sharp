@@ -209,7 +209,7 @@ namespace Speckle.ConnectorAutocadCivil.Entry
     }
 
     #endregion 
-
+    
     public class ButtonCommandHandler : System.Windows.Input.ICommand
     {
       private string commandParameter;

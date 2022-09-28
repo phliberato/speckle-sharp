@@ -24,6 +24,7 @@ using Polyline = Objects.Geometry.Polyline;
 using Spiral = Objects.Geometry.Spiral;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
+using static Speckle.Core.Kits.HostApplications;
 
 #if CIVIL2021 || CIVIL2022 || CIVIL2023
 using Civil = Autodesk.Civil;
@@ -424,7 +425,15 @@ namespace Objects.Converter.AutocadCivil
 #endif
 
             default:
-              return false;
+              {
+                switch (o.ObjectId.ObjectClass.DxfName)
+                {
+                  case "ASTBEAM":
+                    return true; // testar aqui
+                }
+
+                return false;
+              }
           }
 
         case Acad.Geometry.Point3d _:
