@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConverterAutocadCivil.Civil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterAutocadCivil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConverterAutocadCivil.Geometry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConverterAutocadCivil.DxfNames.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory).editorconfig" />

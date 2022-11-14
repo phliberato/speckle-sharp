@@ -8,10 +8,15 @@ using Forms = System.Windows.Forms;
 
 using Speckle.ConnectorAutocadCivil.UI;
 
-using Autodesk.AutoCAD.Runtime;
 using Autodesk.Windows;
 using Autodesk.AutoCAD.ApplicationServices;
 using System;
+
+#if ADVANCESTEEL2023
+using Autodesk.AdvanceSteel.Runtime;
+#else
+using Autodesk.AutoCAD.Runtime;
+#endif
 
 namespace Speckle.ConnectorAutocadCivil.Entry
 {

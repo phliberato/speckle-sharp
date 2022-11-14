@@ -207,6 +207,18 @@ namespace Objects.Converter.AutocadCivil
             case CivilDB.TinSurface o:
               @base = SurfaceToSpeckle(o);
               break;
+
+#elif ADVANCESTEEL2023
+
+            default:
+              switch (obj.ObjectId.ObjectClass.DxfName)
+              {
+                case DxfNames.BEAM:
+                  notes.Add($"Doing the function to convert BEAM to Speckle Object");
+                  //@base = SurfaceToSpeckle(obj);
+                  break;
+              }
+              break;
 #endif
           }
 
@@ -426,12 +438,13 @@ namespace Objects.Converter.AutocadCivil
 
             default:
               {
+#if ADVANCESTEEL2023
                 switch (o.ObjectId.ObjectClass.DxfName)
                 {
-                  case "ASTBEAM":
-                    return true; // testar aqui
+                  case DxfNames.BEAM:
+                    return true;
                 }
-
+#endif
                 return false;
               }
           }
