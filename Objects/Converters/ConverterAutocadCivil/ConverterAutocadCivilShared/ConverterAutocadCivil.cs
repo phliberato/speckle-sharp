@@ -1,4 +1,6 @@
-﻿using Objects.Other;
+﻿using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.DatabaseServices;
+using Objects.Other;
 using Speckle.Core.Kits;
 using Speckle.Core.Models;
 using System;
@@ -22,10 +24,6 @@ using Point = Objects.Geometry.Point;
 using Polycurve = Objects.Geometry.Polycurve;
 using Polyline = Objects.Geometry.Polyline;
 using Spiral = Objects.Geometry.Spiral;
-using Autodesk.AutoCAD.ApplicationServices;
-using Autodesk.AutoCAD.DatabaseServices;
-using static Speckle.Core.Kits.HostApplications;
-
 #if CIVIL2021 || CIVIL2022 || CIVIL2023
 using Civil = Autodesk.Civil;
 using CivilDB = Autodesk.Civil.DatabaseServices;
@@ -37,26 +35,17 @@ namespace Objects.Converter.AutocadCivil
   public partial class ConverterAutocadCivil : ISpeckleConverter
   {
 #if AUTOCAD2021
-    public static string AutocadAppName = VersionedHostApplications.Autocad2021;
-    public static string AppName = HostApplications.AutoCAD.Name;
+    public static string AutocadAppName = HostApplications.AutoCAD.GetVersion(HostAppVersion.v2021);
 #elif AUTOCAD2022
-    public static string AutocadAppName = VersionedHostApplications.Autocad2022;
-    public static string AppName = HostApplications.AutoCAD.Name;
+    public static string AutocadAppName = HostApplications.AutoCAD.GetVersion(HostAppVersion.v2022);
 #elif AUTOCAD2023
-    public static string AutocadAppName = VersionedHostApplications.Autocad2023;
-    public static string AppName = HostApplications.AutoCAD.Name;
+    public static string AutocadAppName = HostApplications.AutoCAD.GetVersion(HostAppVersion.v2023);
 #elif CIVIL2021
-    public static string AutocadAppName = VersionedHostApplications.Civil2021;
-    public static string AppName = HostApplications.Civil.Name;
+    public static string AutocadAppName = HostApplications.Civil.GetVersion(HostAppVersion.v2021);
 #elif CIVIL2022
-    public static string AutocadAppName = VersionedHostApplications.Civil2022;
-    public static string AppName = HostApplications.Civil.Name;
+    public static string AutocadAppName = HostApplications.Civil.GetVersion(HostAppVersion.v2022);
 #elif CIVIL2023
-    public static string AutocadAppName = VersionedHostApplications.Civil2023;
-    public static string AppName = HostApplications.Civil.Name;
-#elif ADVANCESTEEL2023
-    public static string AutocadAppName = VersionedHostApplications.AdvanceSteel2023;
-    public static string AppName = HostApplications.AdvanceSteel.Name;
+    public static string AutocadAppName = HostApplications.Civil.GetVersion(HostAppVersion.v2023);
 #endif
 
     public ConverterAutocadCivil()
@@ -65,7 +54,7 @@ namespace Objects.Converter.AutocadCivil
     }
 
     #region ISpeckleConverter props
-    public string Description => $"Default Speckle Kit for {AppName}";
+    public string Description => "Default Speckle Kit for AutoCAD";
     public string Name => nameof(ConverterAutocadCivil);
     public string Author => "Speckle";
     public string WebsiteOrEmail => "https://speckle.systems";
@@ -95,10 +84,13 @@ namespace Objects.Converter.AutocadCivil
       Trans = Doc.TransactionManager.TopTransaction; // set the stream transaction here! make sure it is the top level transaction
     }
 
+    private string ApplicationIdKey = "applicationId";
+
     public Base ConvertToSpeckle(object @object)
     {
       Base @base = null;
       ApplicationObject reportObj = null;
+      DisplayStyle style = null;
       List<string> notes = new List<string>();
 
       switch (@object)
@@ -110,7 +102,10 @@ namespace Objects.Converter.AutocadCivil
           if (schema != null)
             return ObjectToSpeckleBuiltElement(o);
           */
-          reportObj = new ApplicationObject(obj.Id.ToString(), obj.GetType().ToString());
+          var appId = obj.ObjectId.ToString(); // TODO: UPDATE THIS WITH STORED APP ID IF IT EXISTS
+          reportObj = new ApplicationObject(obj.Id.ToString(), obj.GetType().ToString()) { applicationId = appId };
+          style = DisplayStyleToSpeckle(obj as Entity);
+
           switch (obj)
           {
             case DBPoint o:
@@ -221,43 +216,42 @@ namespace Objects.Converter.AutocadCivil
               break;
 #endif
           }
-
-          DisplayStyle style = DisplayStyleToSpeckle(obj as Entity);
-          if (style != null)
-            @base["displayStyle"] = style;
           break;
-
         case Acad.Geometry.Point3d o:
           @base = PointToSpeckle(o);
           break;
-
         case Acad.Geometry.Vector3d o:
           @base = VectorToSpeckle(o);
           break;
-
         case Acad.Geometry.Line3d o:
           @base = LineToSpeckle(o);
           break;
-
         case Acad.Geometry.LineSegment3d o:
           @base = LineToSpeckle(o);
           break;
-
         case Acad.Geometry.CircularArc3d o:
           @base = ArcToSpeckle(o);
           break;
-
         case Acad.Geometry.Plane o:
           @base = PlaneToSpeckle(o);
           break;
-
         case Acad.Geometry.Curve3d o:
           @base = CurveToSpeckle(o) as Base;
           break;
-
         default:
-          throw new NotSupportedException();
+          if (reportObj != null)
+          {
+            reportObj.Update(status: ApplicationObject.State.Skipped, logItem: $"{@object.GetType()} type not supported");
+            Report.UpdateReportObject(reportObj);
+          }
+          return @base;
       }
+
+      if (@base is null) return @base;
+
+      if (style != null)
+        @base["displayStyle"] = style;
+
       if (reportObj != null)
       {
         reportObj.Update(log: notes);
@@ -279,7 +273,8 @@ namespace Objects.Converter.AutocadCivil
     public object ConvertToNative(Base @object)
     {
       // determine if this object has autocad props
-      bool isFromAutoCAD = @object[AutocadPropName] != null ? true : false; 
+      bool isFromAutoCAD = @object[AutocadPropName] != null ? true : false;
+      bool isFromCivil = @object[CivilPropName] != null ? true : false;
       object acadObj = null;
       var reportObj = Report.GetReportObject(@object.id, out int index) ? new ApplicationObject(@object.id, @object.speckle_type) : null;
       List<string> notes = new List<string>();
@@ -331,13 +326,14 @@ namespace Objects.Converter.AutocadCivil
         case Surface o: 
           return SurfaceToNative(o);
 
-        case Brep o:
-          acadObj = (o.displayMesh != null) ? MeshToNativeDB(o.displayMesh) : null;
-          break;
         */
 
         case Mesh o:
+#if CIVIL2021 || CIVIL2022 || CIVIL2023
+          acadObj = isFromCivil ? CivilSurfaceToNative(o) : MeshToNativeDB(o);
+#else
           acadObj = MeshToNativeDB(o);
+#endif
           break;
 
         case Dimension o:
@@ -345,7 +341,7 @@ namespace Objects.Converter.AutocadCivil
           break;
 
         case BlockInstance o:
-          acadObj = BlockInstanceToNativeDB(o, out BlockReference reference);
+          acadObj = BlockInstanceToNativeDB(o);
           break;
 
         case BlockDefinition o:
@@ -354,15 +350,13 @@ namespace Objects.Converter.AutocadCivil
 
         case Text o:
           acadObj = isFromAutoCAD ? AcadTextToNative(o) : TextToNative(o);
-          Report.Log($"Created Text {o.id}");
           break;
 
-        case Alignment o:
 #if CIVIL2021 || CIVIL2022 || CIVIL2023
+        case Alignment o:
           acadObj = AlignmentToNative(o);
-#endif
-          acadObj = PolylineToNativeDB(o.displayValue);
           break;
+#endif
 
         case ModelCurve o:
           acadObj = CurveToNativeDB(o.baseCurve);
@@ -377,12 +371,17 @@ namespace Objects.Converter.AutocadCivil
           throw new NotSupportedException();
       }
 
-      if (reportObj != null)
+      switch (acadObj)
       {
-        reportObj.Update(log: notes);
-        Report.UpdateReportObject(reportObj);
+        case ApplicationObject o: // some to native methods return an application object (if object is baked to doc during conv)
+          acadObj = o.Converted.Any() ? o.Converted.FirstOrDefault() : null;
+          if (reportObj != null) reportObj.Update(status: o.Status, createdIds: o.CreatedIds, container: o.Container, log: o.Log);
+          break;
+        default:
+          if (reportObj != null) reportObj.Update(log: notes);
+          break;
       }
-
+      if (reportObj != null) Report.UpdateReportObject(reportObj);
       return acadObj;
     }
 
@@ -493,6 +492,5 @@ namespace Objects.Converter.AutocadCivil
           return false;
       }
     }
-
   }
 }
