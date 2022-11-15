@@ -46,6 +46,8 @@ namespace Objects.Converter.AutocadCivil
     public static string AutocadAppName = HostApplications.Civil.GetVersion(HostAppVersion.v2022);
 #elif CIVIL2023
     public static string AutocadAppName = HostApplications.Civil.GetVersion(HostAppVersion.v2023);
+#elif ADVANCESTEEL2023
+    public static string AutocadAppName = HostApplications.AdvanceSteel.GetVersion(HostAppVersion.v2023);
 #endif
 
     public ConverterAutocadCivil()
@@ -53,7 +55,7 @@ namespace Objects.Converter.AutocadCivil
       var ver = System.Reflection.Assembly.GetAssembly(typeof(ConverterAutocadCivil)).GetName().Version;
     }
 
-    #region ISpeckleConverter props
+#region ISpeckleConverter props
     public string Description => "Default Speckle Kit for AutoCAD";
     public string Name => nameof(ConverterAutocadCivil);
     public string Author => "Speckle";
@@ -63,7 +65,7 @@ namespace Objects.Converter.AutocadCivil
     public Document Doc { get; private set; }
     public Transaction Trans { get; private set; } // TODO: evaluate if this should be here
     public Dictionary<string, string> Settings { get; private set; } = new Dictionary<string, string>();
-    #endregion ISpeckleConverter props
+#endregion ISpeckleConverter props
 
     public ReceiveMode ReceiveMode { get; set; }
 

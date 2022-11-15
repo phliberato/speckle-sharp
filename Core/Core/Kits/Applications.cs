@@ -89,6 +89,7 @@ namespace Speckle.Core.Kits
     public static HostApplication Python = new HostApplication("Python", "python");
     public static HostApplication NET = new HostApplication(".NET", "net");
     public static HostApplication Other = new HostApplication("Other", "other");
+    public static HostApplication AdvanceSteel = new HostApplication("Advance Steel", "advancesteel");
 
     /// <summary>
     /// Gets a HostApplication form a string. It could be the versioned name or a string coming from a process running.

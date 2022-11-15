@@ -46,7 +46,7 @@ namespace Speckle.ConnectorAutocadCivil
     public static string AppName = HostApplications.Civil.Name;
     public static string Slug = HostApplications.Civil.Slug;
 #elif ADVANCESTEEL2023
-    public static string VersionedAppName = VersionedHostApplications.AdvanceSteel2023;
+    public static string VersionedAppName = HostApplications.AdvanceSteel.GetVersion(HostAppVersion.v2023);
     public static string AppName = HostApplications.AdvanceSteel.Name;
     public static string Slug = HostApplications.AdvanceSteel.Slug;
 #endif
