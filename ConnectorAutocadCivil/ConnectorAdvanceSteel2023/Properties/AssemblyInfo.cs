@@ -15,6 +15,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ExtensionApplication(typeof(Speckle.ConnectorAutocadCivil.Entry.App))]
+[assembly: CommandClass(typeof(Speckle.ConnectorAutocadCivil.Entry.SpeckleAutocadCommand))]
+[assembly: CommandClass(typeof(Speckle.ConnectorAutocadCivil.Entry.OneClickCommand))]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from

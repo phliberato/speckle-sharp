@@ -1056,7 +1056,8 @@ namespace Speckle.ConnectorAutocadCivil.UI
       //// GLOBAL EVENT HANDLERS
       Application.DocumentWindowCollection.DocumentWindowActivated += Application_WindowActivated;
       Application.DocumentManager.DocumentActivated += Application_DocumentActivated;
-      Doc.BeginDocumentClose += Application_DocumentClosed;
+      Application.DocumentManager.DocumentToBeDeactivated += Application_DocumentToBeDeactivated;
+      Application.DocumentManager.DocumentToBeDestroyed += Application_DocumentToBeDestroyed;
 
       var layers = Application.UIBindings.Collections.Layers;
       layers.CollectionChanged += Application_LayerChanged;
@@ -1084,7 +1085,40 @@ namespace Speckle.ConnectorAutocadCivil.UI
       catch { }
     }
 
-    private void Application_DocumentClosed(object sender, DocumentBeginCloseEventArgs e)
+    private void Application_DocumentActivated(object sender, DocumentCollectionEventArgs e)
+    {
+      try
+      {
+        // Triggered when a document window is activated. This will happen automatically if a document is newly created or opened.
+        if (e.Document == null)
+        {
+          DocumentClosed();
+          return;
+        }
+
+        var streams = GetStreamsInFile();
+        if (streams.Count > 0)
+          SpeckleAutocadCommand.CreateOrFocusSpeckle();
+
+        if (UpdateSavedStreams != null)
+          UpdateSavedStreams(streams);
+
+        MainViewModel.GoHome();
+      }
+      catch { }
+    }
+
+    private void Application_DocumentToBeDestroyed(object sender, DocumentCollectionEventArgs e)
+    {
+      DocumentClosed();
+    }
+
+    private void Application_DocumentToBeDeactivated(object sender, DocumentCollectionEventArgs e)
+    {
+      DocumentClosed();
+    }
+
+    private void DocumentClosed()
     {
       try
       {
@@ -1100,25 +1134,6 @@ namespace Speckle.ConnectorAutocadCivil.UI
       catch { }
     }
 
-    private void Application_DocumentActivated(object sender, DocumentCollectionEventArgs e)
-    {
-      try
-      {
-        // Triggered when a document window is activated. This will happen automatically if a document is newly created or opened.
-        if (e.Document == null)
-          return;
-
-        var streams = GetStreamsInFile();
-        if (streams.Count > 0)
-          SpeckleAutocadCommand.CreateOrFocusSpeckle();
-
-        if (UpdateSavedStreams != null)
-          UpdateSavedStreams(streams);
-
-        MainViewModel.GoHome();
-      }
-      catch { }
-    }
     #endregion
   }
 }
