@@ -1,21 +1,19 @@
-﻿using System.Windows.Controls;
-using System.Windows.Media;
-using System.Reflection;
-using System.IO;
-using System.Windows.Media.Imaging;
-using System.Linq;
-using Forms = System.Windows.Forms;
-
-using Speckle.ConnectorAutocadCivil.UI;
-
 using Autodesk.Windows;
-using Autodesk.AutoCAD.ApplicationServices;
+using Speckle.ConnectorAutocadCivil.UI;
 using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using Forms = System.Windows.Forms;
 
 #if ADVANCESTEEL2023
 using Autodesk.AdvanceSteel.Runtime;
 #else
 using Autodesk.AutoCAD.Runtime;
+using Autodesk.AutoCAD.ApplicationServices;
 #endif
 
 namespace Speckle.ConnectorAutocadCivil.Entry
@@ -56,7 +54,6 @@ namespace Speckle.ConnectorAutocadCivil.Entry
         var bindings = new ConnectorBindingsAutocad();
         bindings.RegisterAppEvents();
         SpeckleAutocadCommand.Bindings = bindings;
-        OneClickCommand.Bindings = bindings;
       }
       catch (System.Exception e)
       {
@@ -242,9 +239,6 @@ namespace Speckle.ConnectorAutocadCivil.Entry
           {
             case "Speckle":
               SpeckleAutocadCommand.SpeckleCommand();
-              break;
-            case "SpeckleSend":
-              OneClickCommand.SendCommand();
               break;
             case "SpeckleCommunity":
               SpeckleAutocadCommand.SpeckleCommunity();
