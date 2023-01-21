@@ -13,6 +13,10 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.EditorInput;
 
+#if ADVANCESTEEL2023
+using Autodesk.AdvanceSteel.DocumentManagement;
+using Autodesk.AdvanceSteel.DotNetRoots.Units;
+#endif
 
 #if CIVIL2021 || CIVIL2022 || CIVIL2023
 using Autodesk.Aec.ApplicationServices;
@@ -268,6 +272,24 @@ namespace Objects.Converter.AutocadCivil
     #endregion
 
     #region units
+
+#if ADVANCESTEEL2023
+
+    private double _factor;
+    public double Factor
+    {
+      get
+      {
+        if (_factor.Equals(0.0))
+        {
+          _factor = DocumentManager.GetCurrentDocument().CurrentDatabase.Units.UnitOfDistance.Factor;
+        }
+
+        return _factor;
+      }
+    }
+#endif
+
     private string _modelUnits;
     public string ModelUnits
     {
@@ -337,7 +359,8 @@ namespace Objects.Converter.AutocadCivil
           throw new Speckle.Core.Logging.SpeckleException($"The Unit System \"{units}\" is unsupported.");
       }
     }
-    #endregion
+
+#endregion
 
   }
 }

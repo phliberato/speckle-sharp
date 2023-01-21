@@ -7,6 +7,7 @@ using DesktopUI2.Models;
 using DesktopUI2.Models.Filters;
 using DesktopUI2.Models.Settings;
 using DesktopUI2.ViewModels;
+using Speckle.ConnectorAutocadCivil.DocumentUtils;
 using Speckle.ConnectorAutocadCivil.Entry;
 using Speckle.ConnectorAutocadCivil.Storage;
 using Speckle.Core.Api;
@@ -926,8 +927,10 @@ namespace Speckle.ConnectorAutocadCivil.UI
     delegate void SendingDelegate(Base commitObject, ISpeckleConverter converter, StreamState state, ProgressViewModel progress, ref int convertedCount);
     private void ConvertSendCommit(Base commitObject, ISpeckleConverter converter, StreamState state, ProgressViewModel progress, ref int convertedCount)
     {
-      using (Transaction tr = Doc.Database.TransactionManager.StartTransaction())
+      using (TransactionContext.StartTransaction(Doc))
       {
+        Transaction tr = Doc.Database.TransactionManager.TopTransaction;
+
         // set the context doc for conversion - this is set inside the transaction loop because the converter retrieves this transaction for all db editing when the context doc is set!
         converter.SetContextDocument(Doc);
 
@@ -946,7 +949,6 @@ namespace Speckle.ConnectorAutocadCivil.UI
           // handle user cancellation
           if (progress.CancellationTokenSource.Token.IsCancellationRequested)
           {
-            tr.Commit();
             return;
           }
 
@@ -972,7 +974,7 @@ namespace Speckle.ConnectorAutocadCivil.UI
 
           if (!converter.CanConvertToSpeckle(obj))
           {
-            reportObj.Update(status: ApplicationObject.State.Skipped, logItem: $"Sending this object type is not supported in AutoCAD/Civil3D");
+            reportObj.Update(status: ApplicationObject.State.Skipped, logItem: $"Sending this object type is not supported in AutoCAD/Civil3D/AdvanceSteel");
             progress.Report.Log(reportObj);
             continue;
           }
@@ -1029,8 +1031,6 @@ namespace Speckle.ConnectorAutocadCivil.UI
             continue;
           }
         }
-
-        tr.Commit();
       }
     }
 

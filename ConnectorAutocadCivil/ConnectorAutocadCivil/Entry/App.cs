@@ -1,3 +1,4 @@
+﻿using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.Windows;
 using Speckle.ConnectorAutocadCivil.UI;
 using System;
@@ -13,7 +14,6 @@ using Forms = System.Windows.Forms;
 using Autodesk.AdvanceSteel.Runtime;
 #else
 using Autodesk.AutoCAD.Runtime;
-using Autodesk.AutoCAD.ApplicationServices;
 #endif
 
 namespace Speckle.ConnectorAutocadCivil.Entry

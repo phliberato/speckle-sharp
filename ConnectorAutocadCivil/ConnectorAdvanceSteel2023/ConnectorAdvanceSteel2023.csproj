@@ -56,6 +56,14 @@
       <Project>{eab21473-7013-431c-b526-fb5ba657ae2f}</Project>
       <Name>DesktopUI2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Objects\Converters\StructuralUtilities\PolygonMesher\PolygonMesher.csproj">
+      <Project>{3a8fc47d-be00-4319-8285-be4f10fc0a3b}</Project>
+      <Name>PolygonMesher</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Objects\Converters\StructuralUtilities\Triangle.NET\Triangle.csproj">
+      <Project>{ef17d73e-63c8-438e-aba6-85a6d6883232}</Project>
+      <Name>Triangle</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia">
