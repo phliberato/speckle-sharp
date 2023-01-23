@@ -87,14 +87,13 @@ namespace Objects.Converter.AutocadCivil
       var startPoint = beam.GetPointAtStart();
       var endPoint = beam.GetPointAtEnd();
       var units = ModelUnits;
-      var factor = Factor;
 
       Point speckleStartPoint = PointToSpeckle(startPoint, units);
       Point speckleEndPoint = PointToSpeckle(endPoint, units);
       advanceSteelBeam.baseLine = new Line(speckleStartPoint, speckleEndPoint, units);
       advanceSteelBeam.baseLine.length = speckleStartPoint.DistanceTo(speckleEndPoint);
 
-      var modelerBody = beam.GetModeler(Autodesk.AdvanceSteel.Modeler.BodyContext.eBodyContext.kDetailed);
+      var modelerBody = beam.GetModeler(Autodesk.AdvanceSteel.Modeler.BodyContext.eBodyContext.kMaxDetailed);
 
       advanceSteelBeam.area = beam.GetPaintArea();
       advanceSteelBeam.volume = modelerBody.Volume;
