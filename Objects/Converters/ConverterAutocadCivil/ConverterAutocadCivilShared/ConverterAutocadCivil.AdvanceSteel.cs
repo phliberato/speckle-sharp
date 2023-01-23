@@ -41,7 +41,6 @@ using ASPoint3d = Autodesk.AdvanceSteel.Geometry.Point3d;
 using System.Security.Cryptography;
 using System.Collections;
 using Autodesk.AdvanceSteel.Modeler;
-using StructuralUtilities.PolygonMesher;
 using Objects.Geometry;
 using Autodesk.AutoCAD.BoundaryRepresentation;
 using MathNet.Spatial.Euclidean;
@@ -119,22 +118,19 @@ namespace Objects.Converter.AutocadCivil
       foreach (var faceInfo in facesInfo)
       {
         int faceIndexOffset = vertexList.Count / 3;
-
         var input = new Polygon();
 
+        //Create coordinateSystemAligned with OuterContour
         var outerList = faceInfo.OuterContour.Select(x => vertices.ElementAt(x));
-
         CoordinateSystem coordinateSystemAligned = CreateCoordinateSystemAligned(outerList);
 
-        var listOuterVertices = outerList.Select(x => x.TransformBy(coordinateSystemAligned)).Select(x => new TriangleVertex(x.X, x.Y));
-        input.Add(new Contour(listOuterVertices));
+        input.Add(CreateContour(outerList, coordinateSystemAligned));
 
         if (faceInfo.InnerContours != null)
         {
           foreach (var listInnerContours in faceInfo.InnerContours)
           {
-            var listInnerVertices = listInnerContours.Select(x => vertices.ElementAt(x).TransformBy(coordinateSystemAligned)).Select(x => new TriangleVertex(x.X, x.Y));
-            input.Add(new Contour(listInnerVertices), true);
+            input.Add(CreateContour(listInnerContours.Select(x => vertices.ElementAt(x)), coordinateSystemAligned), true);
           }
         }
 
@@ -151,6 +147,12 @@ namespace Objects.Converter.AutocadCivil
       mesh.bbox = BoxToSpeckle(extents);
 
       return mesh;
+    }
+
+    private Contour CreateContour(IEnumerable<Point3D> points, CoordinateSystem coordinateSystemAligned)
+    {
+      var listTriangleVertex = points.Select(x => x.TransformBy(coordinateSystemAligned)).Select(x => new TriangleVertex(x.X, x.Y));
+      return new Contour(listTriangleVertex);
     }
 
     private IEnumerable<double> GetFlatCoordinates(IEnumerable<Point3D> verticesMesh)
@@ -191,67 +193,6 @@ namespace Objects.Converter.AutocadCivil
       CoordinateSystem toCs = new CoordinateSystem(Point3D.Origin, UnitVector3D.XAxis, UnitVector3D.YAxis, UnitVector3D.ZAxis);
       return CoordinateSystem.CreateMappingCoordinateSystem(fromCs, toCs);
 
-    }
-
-    public Mesh GetMeshFromModelerBody2(ModelerBody modelerBody, Extents extents)
-    {
-      modelerBody.getBrepInfo(out var vertices, out var facesInfo);
-
-      List<double> vertexList = new List<double> { };
-      List<int> facesList = new List<int> { };
-
-      foreach (var faceInfo in facesInfo)
-      {
-        int faceIndexOffset = vertexList.Count / 3;
-        var mesher = new PolygonMesher();
-
-        List<List<double>> innerLoopList = new List<List<double>>();
-        List<double> outerLoopList = new List<double> { };
-
-        foreach (var indexVertex in faceInfo.OuterContour)
-        {
-          var vertex = vertices[indexVertex];
-
-          outerLoopList.Add(vertex.x);
-          outerLoopList.Add(vertex.y);
-          outerLoopList.Add(vertex.z);
-        }
-
-        if (faceInfo.InnerContours != null)
-        {
-          foreach (var listInnerContours in faceInfo.InnerContours)
-          {
-            var innerLoopListOfList = new List<double> { };
-            innerLoopList.Add(innerLoopListOfList);
-
-            foreach (var indexVertex in listInnerContours)
-            {
-              var vertex = vertices[indexVertex];
-
-              innerLoopListOfList.Add(vertex.x);
-              innerLoopListOfList.Add(vertex.y);
-              innerLoopListOfList.Add(vertex.z);
-            }
-          }
-        }
-
-        if (innerLoopList.Any())
-        {
-          mesher.Init(outerLoopList, innerLoopList);
-        }
-        else
-        {
-          mesher.Init(outerLoopList);
-        }
-
-        facesList.AddRange(mesher.Faces(faceIndexOffset));
-        vertexList.AddRange(mesher.Coordinates);
-      }
-
-      Mesh mesh = new Mesh(vertexList, facesList, units: ModelUnits);
-      mesh.bbox = BoxToSpeckle(extents);
-
-      return mesh;
     }
 
     public static T GetFilerObjectByEntity<T>(DBObject @object) where T: FilerObject
