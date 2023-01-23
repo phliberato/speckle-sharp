@@ -49,6 +49,7 @@ using MathPlane = MathNet.Spatial.Euclidean.Plane;
 using TriangleNet.Geometry;
 using TriangleVertex = TriangleNet.Geometry.Vertex;
 using TriangleMesh = TriangleNet.Mesh;
+using TriangleNet.Topology;
 
 namespace Objects.Converter.AutocadCivil
 {
@@ -99,9 +100,7 @@ namespace Objects.Converter.AutocadCivil
       advanceSteelBeam.area = beam.GetPaintArea();
       advanceSteelBeam.volume = modelerBody.Volume;
 
-      advanceSteelBeam.displayValue = new List<Mesh> { GetMeshFromModelerBody2(modelerBody, beam.GeomExtents) };
-
-      GetMeshFromModelerBody(modelerBody, beam.GeomExtents);
+      advanceSteelBeam.displayValue = new List<Mesh> { GetMeshFromModelerBody(modelerBody, beam.GeomExtents) };
 
       SetUnits(advanceSteelBeam);
 
@@ -112,62 +111,46 @@ namespace Objects.Converter.AutocadCivil
     {
       modelerBody.getBrepInfo(out var verticesAS, out var facesInfo);
 
+      IEnumerable<Point3D> vertices = verticesAS.Select(x => PointASToMath(x));
+
       List<double> vertexList = new List<double> { };
       List<int> facesList = new List<int> { };
 
       foreach (var faceInfo in facesInfo)
       {
+        int faceIndexOffset = vertexList.Count / 3;
+
         var input = new Polygon();
 
-        IEnumerable<Point3D> vertices = verticesAS.Select(x => PointASToMath(x));
-        CoordinateSystem coordinateSystemAligned = CreateCoordinateSystemAligned(vertices);
-        var transformedVertices = vertices.Select(x => x.TransformBy(coordinateSystemAligned));
+        var outerList = faceInfo.OuterContour.Select(x => vertices.ElementAt(x));
 
-        List<TriangleVertex> listOuterVertices = new List<TriangleVertex>();
-      
-        foreach (var indexVertex in faceInfo.OuterContour)
-        {
-          var vertice = transformedVertices.ElementAt(indexVertex);
-          listOuterVertices.Add(new TriangleVertex(vertice.X, vertice.Y));
-        }
+        CoordinateSystem coordinateSystemAligned = CreateCoordinateSystemAligned(outerList);
 
+        var listOuterVertices = outerList.Select(x => x.TransformBy(coordinateSystemAligned)).Select(x => new TriangleVertex(x.X, x.Y));
         input.Add(new Contour(listOuterVertices));
 
         if (faceInfo.InnerContours != null)
         {
           foreach (var listInnerContours in faceInfo.InnerContours)
           {
-            List<TriangleVertex> listInnerVertices = new List<TriangleVertex>();
-
-            foreach (var indexVertex in listInnerContours)
-            {
-              var vertice = transformedVertices.ElementAt(indexVertex);
-              listInnerVertices.Add(new TriangleVertex(vertice.X, vertice.Y));
-            }
-
+            var listInnerVertices = listInnerContours.Select(x => vertices.ElementAt(x).TransformBy(coordinateSystemAligned)).Select(x => new TriangleVertex(x.X, x.Y));
             input.Add(new Contour(listInnerVertices), true);
           }
         }
 
-        CoordinateSystem coordinateSystemInverted = coordinateSystemAligned.Invert();
-
         var triangleMesh = (TriangleMesh)input.Triangulate();
 
+        CoordinateSystem coordinateSystemInverted = coordinateSystemAligned.Invert();
         var verticesMesh = triangleMesh.Vertices.Select(x => new Point3D(x.X, x.Y, 0).TransformBy(coordinateSystemInverted));
 
         vertexList.AddRange(GetFlatCoordinates(verticesMesh));
-
-        triangleMesh.Triangles.Select(x => x.)
-
-        //facesList.AddRange(mesher.Faces(faceIndexOffset));
-
+        facesList.AddRange(GetFaceVertices(triangleMesh.Triangles, faceIndexOffset));
       }
 
-      return null;
-      //Mesh mesh = new Mesh(vertexList, facesList, units: ModelUnits);
-      //mesh.bbox = BoxToSpeckle(extents);
+      Mesh mesh = new Mesh(vertexList, facesList, units: ModelUnits);
+      mesh.bbox = BoxToSpeckle(extents);
 
-      //return mesh;
+      return mesh;
     }
 
     private IEnumerable<double> GetFlatCoordinates(IEnumerable<Point3D> verticesMesh)
@@ -177,6 +160,17 @@ namespace Objects.Converter.AutocadCivil
         yield return vertice.X;
         yield return vertice.Y;
         yield return vertice.Z;
+      }
+    }
+
+    private IEnumerable<int> GetFaceVertices(ICollection<Triangle> triangles, int faceIndexOffset)
+    {
+      foreach (var triangle in triangles)
+      {
+        yield return 3;
+        yield return triangle.GetVertex(0).ID + faceIndexOffset;
+        yield return triangle.GetVertex(1).ID + faceIndexOffset;
+        yield return triangle.GetVertex(2).ID + faceIndexOffset;
       }
     }
 
