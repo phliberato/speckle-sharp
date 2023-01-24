@@ -129,6 +129,7 @@ namespace Speckle.Core.Kits
       if (appname.Contains("python")) return Python;
       if (appname.Contains("net")) return NET;
       if (appname.Contains("navisworks")) return Navisworks;
+      if (appname.Contains("advancesteel")) return AdvanceSteel;
       return new HostApplication(appname, appname);
 
     }
