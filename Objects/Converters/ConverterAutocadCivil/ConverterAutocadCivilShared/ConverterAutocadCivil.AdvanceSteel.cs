@@ -194,7 +194,7 @@ namespace Objects.Converter.AutocadCivil
 
     }
 
-    public static T GetFilerObjectByEntity<T>(DBObject @object) where T: FilerObject
+    public static T GetFilerObjectByEntity<T>(DBObject @object) where T : FilerObject
     {
       ASObjectId idCadEntity = new ASObjectId(@object.ObjectId.OldIdPtr);
       ASObjectId idFilerObject = DatabaseManager.GetFilerObjectId(idCadEntity, false);
